@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using System.Linq;
+using System.Windows.Ink;
 
 
 namespace TacticalBoard
@@ -57,6 +58,8 @@ namespace TacticalBoard
         //メニュー項目用
         List<MenuItem> CMItems = new List<MenuItem>();
         //private ListBox ObjectList = null;
+
+        DrawingAttributes inkDA;
 
         public MainWindow()
         {
@@ -482,11 +485,12 @@ namespace TacticalBoard
         //インクのカラー設定
         private void ColorButton(object sender, RoutedEventArgs e)
         {
+            int actualDrawingSize = 3;
+            int previewDrawingSize = 15;
             //現在のインクと入れ替えたりする
             Button beforeInkButton = nowInkButton;
             nowInkButton = sender as Button;
             CMItems[0].IsChecked = true;
-
 
             //インクモード時に同じボタンを押したらインクオフ、それ以外は押した色でインクモード
             if (nowInkButton.BorderBrush.ToString().Equals(Colors.Black.ToString()))
@@ -509,6 +513,32 @@ namespace TacticalBoard
             inkCanvasLayer2.DefaultDrawingAttributes.Color = colorBrush.Color;
             inkCanvasLayer3.DefaultDrawingAttributes.Color = colorBrush.Color;
             inkCanvasLayer4.DefaultDrawingAttributes.Color = colorBrush.Color;
+
+            inkDA = new DrawingAttributes
+            {
+                Color = colorBrush.Color,
+                Width = previewDrawingSize,
+                Height = previewDrawingSize,
+                FitToCurve = false,
+                IsHighlighter = false,
+                StylusTip = StylusTip.Ellipse,
+                IgnorePressure = false
+            };
+
+            nowLayerInk.DefaultDrawingAttributes = inkDA;
+
+            // Set the actual drawing size smaller
+            nowLayerInk.PreviewMouseLeftButtonDown += (s, args) =>
+            {
+                inkDA.Width = actualDrawingSize;
+                inkDA.Height = actualDrawingSize;
+            };
+
+            nowLayerInk.PreviewMouseLeftButtonUp += (s, args) =>
+            {
+                inkDA.Width = previewDrawingSize;
+                inkDA.Height = previewDrawingSize;
+            };
         }
 
         private void TextButtonClick(object sender, RoutedEventArgs e)
