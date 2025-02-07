@@ -301,8 +301,8 @@ namespace TacticalBoard
             }
 
             EraseButton.IsChecked = true;
-            CMItems[1].IsChecked = true;
             CMItems[0].IsChecked = false;
+            CMItems[1].IsChecked = true;
             CMItems[2].IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.EraseByStroke;
             nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
@@ -314,6 +314,9 @@ namespace TacticalBoard
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             EraseButton.IsChecked = false;
             CMItems[1].IsChecked = false;
+            CMItems[2].IsChecked = false;
+            MoveButton.IsChecked = false;
+            isDragging = false;
 
         }
 
@@ -353,6 +356,9 @@ namespace TacticalBoard
             //スタンプを配置
             nowLayerStamp.Children.Add(stamp);
             stampImages.Add(stamp);
+
+            CMItems[2].IsChecked = false;
+            MenuPenClick(null, null);
         }
 
         private void PressStamp(Image _stamp)
@@ -379,6 +385,9 @@ namespace TacticalBoard
             // スタンプを配置
             nowLayerStamp.Children.Add(stamp);
             stampImages.Add(stamp);
+
+            CMItems[2].IsChecked = false;
+            MenuPenClick(null, null);
         }
 
         //グレスタンプボタン
@@ -389,6 +398,8 @@ namespace TacticalBoard
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             MoveButton.IsChecked = false;
             isDragging = false;
+            CMItems[2].IsChecked = false;
+
 
             //スタンプ押下メソッドを呼び出す
             PressStamp("Resources/frag.png");
@@ -402,6 +413,7 @@ namespace TacticalBoard
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             MoveButton.IsChecked = false;
             isDragging = false;
+            CMItems[2].IsChecked = false;
 
             //スタンプ押下メソッドを呼び出す。
             PressStamp("Resources/smoke.png");
@@ -415,6 +427,7 @@ namespace TacticalBoard
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             MoveButton.IsChecked = false;
             isDragging = false;
+            CMItems[2].IsChecked = false;
 
             //スタンプ押下メソッドを呼び出す。
             PressStamp("Resources/stun.png");
@@ -423,6 +436,9 @@ namespace TacticalBoard
         //その他スタンプボタン
         private void stampButtonClick(object sender, RoutedEventArgs e)
         {
+            isDragging = false;
+            CMItems[2].IsChecked = false;
+
             // ダイアログのインスタンスを生成
             var dialog = new OpenFileDialog
             {
