@@ -9,6 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
+using System.Linq;
+
 
 namespace TacticalBoard
 {
@@ -53,7 +56,7 @@ namespace TacticalBoard
 
         //メニュー項目用
         List<MenuItem> CMItems = new List<MenuItem>();
-
+        //private ListBox ObjectList = null;
 
         public MainWindow()
         {
@@ -67,6 +70,7 @@ namespace TacticalBoard
                 "Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1"
             };
 
+             //ObjectList の初期化は不要です。XAMLで定義されています。
         }
 
         //Thumbドラッグ開始
@@ -107,9 +111,9 @@ namespace TacticalBoard
                 string[] split = thumb.Name.Split('_');
                 Thumb hiddenthumb;
 
-                if (split.Length > 1) 
+                if (split.Length > 1)
                 {
-                    hiddenthumb = FindName(split[0] ) as Thumb;
+                    hiddenthumb = FindName(split[0]) as Thumb;
                 }
                 else
                 {
@@ -332,6 +336,29 @@ namespace TacticalBoard
             stampImages.Add(stamp);
         }
 
+        private void PressStamp(Image _stamp)
+        {
+            //スタンプのコピーを作成
+            Image stamp = new Image
+            {
+                Source = _stamp.Source,
+                Width = 50
+            };
+            IsStamp = true;
+            stampIndex++;
+
+            //右クリックで削除できるようにイベントハンドラを用意する
+            stamp.MouseRightButtonUp += new MouseButtonEventHandler(StampClear);
+
+            //マウスカーソルの位置に画像をセットする
+            Point mousePoint = Mouse.GetPosition(nowLayerInk);
+            stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+
+            //スタンプを配置
+            nowLayerStamp.Children.Add(stamp);
+            stampImages.Add(stamp);
+        }
+
         //グレスタンプボタン
         private void fragButtonClick(object sender, RoutedEventArgs e)
         {
@@ -526,7 +553,8 @@ namespace TacticalBoard
             stampTextBlocks[4].Margin = new Thickness(0, -1, 0, 0);
 
             //スタンプを配置
-            for (; i > 0; i--) {
+            for (; i > 0; i--)
+            {
                 TextStampCanvas[sTBIndex].Children.Add(stampTextBlocks[i - 1]);
             }
             nowLayerStamp.Children.Add(TextStampCanvas[sTBIndex]);
@@ -575,52 +603,72 @@ namespace TacticalBoard
             nextthumb.Visibility = Visibility.Visible;
         }
 
+
         // udoya func
-        private void LoadStamps()
+        private void OperatorButtonClick(object sender, RoutedEventArgs e)
         {
-            string stampFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "stamps");
-            if (System.IO.Directory.Exists(stampFolder))
+            string role = (sender as Button).Content.ToString().ToLower();
+            string directoryPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output", role);
+            DisplayOperatorIcons(directoryPath);
+        }
+
+        private void DisplayOperatorIcons(string directoryPath)
+        {
+            if (!Directory.Exists(directoryPath))
             {
-                var files = System.IO.Directory.GetFiles(stampFolder, "*.*");
-                foreach (var file in files)
-                {
-                    if (file.EndsWith(".png") || file.EndsWith(".jpg") || file.EndsWith(".jpeg"))
-                    {
-                        StackPanel stackPanel = new StackPanel { Orientation = Orientation.Vertical, Margin = new Thickness(5) };
-
-                        Image image = new Image
-                        {
-                            Source = new BitmapImage(new Uri(file, UriKind.Absolute)),
-                            Width = 100,
-                            Height = 100,
-                            Tag = file
-                        };
-                        //image.MouseLeftButtonUp += Image_MouseLeftButtonUp;
-
-                        TextBlock textBlock = new TextBlock
-                        {
-                            Text = System.IO.Path.GetFileName(file),
-                            HorizontalAlignment = HorizontalAlignment.Center
-                        };
-
-                        stackPanel.Children.Add(image);
-                        stackPanel.Children.Add(textBlock);
-                        //StampPanel.Children.Add(stackPanel);
-                    }
-                }
+                MessageBox.Show("Directory not found: " + directoryPath);
+                return;
             }
-            else
+
+            var files = Directory.GetFiles(directoryPath, "*.png", SearchOption.AllDirectories);
+            if (files.Length == 0)
             {
-                MessageBox.Show("スタンプフォルダが見つかりません。");
+                MessageBox.Show("No PNG files found in directory: " + directoryPath);
+                return;
+            }
+
+            ObjectList.Items.Clear();
+
+            foreach (var file in files)
+            {
+                StackPanel panel = new StackPanel { Orientation = Orientation.Horizontal };
+                Image image = new Image
+                {
+                    Source = new BitmapImage(new Uri(file, UriKind.Absolute)),
+                    Width = 30,
+                    Height = 30,
+                };
+                TextBlock textBlock = new TextBlock
+                {
+                    // size
+                    FontSize = 16,
+                    Text = System.IO.Path.GetFileNameWithoutExtension(file),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5, 0, 0, 0)
+                };
+
+                panel.Children.Add(image);
+                panel.Children.Add(textBlock);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ObjectList.Items.Add(panel);
+                });
+            }
+            ObjectList.UpdateLayout();
+        }
+        private void ObjectList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (ObjectList.SelectedItem is StackPanel panel)
+            {
+                Image image = panel.Children.OfType<Image>().FirstOrDefault();
+                //ペン関係をオフにする
+                EraseButton.IsChecked = false;
+                nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+
+                //スタンプ押下メソッドを呼び出す。
+                PressStamp(image);
             }
         }
 
-        //private void Image_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        //{
-        //    Image image = sender as Image;
-        //    SelectedStampPath = image.Tag as string;
-        //    this.DialogResult = true;
-        //    this.Close();
-        //}
     }
 }
