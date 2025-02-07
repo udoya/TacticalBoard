@@ -227,8 +227,9 @@
     <Button x:Name="SmokeButton" Content="Smoke" HorizontalAlignment="Left" Margin="355,5,0,0" VerticalAlignment="Top" Width="45" Click="smokeButtonClick"/>
     <Button x:Name="StunButton" Content="Stun" HorizontalAlignment="Left" Margin="400,5,0,0" VerticalAlignment="Top" Width="45" Click="stunButtonClick"/>
     <Button x:Name="StampButton" Content="Stamp" HorizontalAlignment="Left" Margin="445,5,0,0" VerticalAlignment="Top" Width="45" Click="stampButtonClick"/>
-    <TextBox x:Name="StampText" HorizontalAlignment="Left" Height="20" Margin="600,5,0,0" VerticalAlignment="Top" TextWrapping="Wrap" Width="120" Foreground="Black"/>
-    <Button x:Name="TextButton" Content="Text" HorizontalAlignment="Left" Margin="711,5,0,5" VerticalAlignment="Top" Click="TextButtonClick"  Width="45"/>
+    <TextBox x:Name="StampText" HorizontalAlignment="Left" Height="20" Margin="520,5,0,0" VerticalAlignment="Top" TextWrapping="Wrap" Width="120" Foreground="Black"/>
+    <Button x:Name="TextButton" Content="Text" HorizontalAlignment="Left" Margin="640,5,0,5" VerticalAlignment="Top" Click="TextButtonClick"  Width="45"/>
+    <Button x:Name="mapFolderButton" Content="MapFolder" HorizontalAlignment="Left" Margin="730,5,0,5" VerticalAlignment="Top" Click="mapFolderButton_Click"  Width="70"/>
     <Button x:Name="Layer1Button" Content="Layer1" HorizontalAlignment="Left" Margin="800,5,0,0" VerticalAlignment="Top" Width="45" Click="layerButtonClick" IsEnabled="False"/>
     <Button x:Name="Layer2Button" Content="Layer2" HorizontalAlignment="Left" Margin="845,5,0,0" VerticalAlignment="Top" Width="45" Click="layerButtonClick"/>
     <Button x:Name="Layer3Button" Content="Layer3" HorizontalAlignment="Left" Margin="890,5,0,0" VerticalAlignment="Top" Width="45" Click="layerButtonClick"/>

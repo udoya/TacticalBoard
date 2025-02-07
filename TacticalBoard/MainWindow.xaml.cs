@@ -469,17 +469,17 @@ namespace TacticalBoard
             {
                 return;
             }
-                try
-                {
-                    var Stamp = sender as Image;
-                    Stamp.Visibility = Visibility.Collapsed;
-                }
-                catch (Exception)
-                {
-                    var Stamp = sender as TextBlock;
-                    var textcanvas = Stamp.Parent as Canvas;
-                    textcanvas.Visibility = Visibility.Collapsed;
-                }
+            try
+            {
+                var Stamp = sender as Image;
+                Stamp.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception)
+            {
+                var Stamp = sender as TextBlock;
+                var textcanvas = Stamp.Parent as Canvas;
+                textcanvas.Visibility = Visibility.Collapsed;
+            }
         }
 
         //インクのカラー設定
@@ -712,5 +712,72 @@ namespace TacticalBoard
             }
         }
 
+        private void UpdateAllLayerBackGroundWithFileName(string filePath, int i)
+        //
+        {
+            if (File.Exists(filePath))
+            {
+                ImageBrush ib = new ImageBrush
+                {
+                    ImageSource = new BitmapImage(new Uri(filePath, UriKind.Relative)),
+                    Stretch = Stretch.Uniform
+                };
+                switch (i)
+                {
+                    case 0:
+                        inkCanvasLayer1.Background = ib;
+                        break;
+                    case 1:
+                        inkCanvasLayer2.Background = ib;
+                        break;
+                    case 2:
+                        inkCanvasLayer3.Background = ib;
+                        break;
+                    case 3:
+                        inkCanvasLayer4.Background = ib;
+                        break;
+                }
+            }
+
+        }
+
+        private void mapFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            // inkcanvaslayer1~4のbackgroundを初期化
+            inkCanvasLayer1.Background = null;
+            inkCanvasLayer2.Background = null;
+            inkCanvasLayer3.Background = null;
+            inkCanvasLayer4.Background = null;
+
+            var dialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                Description = "使用したいマップが入っているフォルダを選択してください。0,1,2,3.jpg/pngが各レイヤに読みこまれます。",
+                // 初期フォルダを実行ディレクトリ+mapに設定する
+                SelectedPath = AppDomain.CurrentDomain.BaseDirectory + "maps"
+            };
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    string selectedPath = dialog.SelectedPath;
+                    // フォルダ内の画像ファイルを取得 (seletcedPath+ "/<0,1,2,3>.png")の4枚、ただし存在しない場合は無視
+                    for (int i = 0; i < 4; i++)
+                    {
+                        string filePath = System.IO.Path.Combine(selectedPath, i + ".png");
+                        UpdateAllLayerBackGroundWithFileName(filePath, i);
+
+                        // jpgに対してもやりたかった
+                        filePath = System.IO.Path.Combine(selectedPath, i + ".jpg");
+                        UpdateAllLayerBackGroundWithFileName(filePath, i);
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("エラーが発生しました。");
+                }
+            }
+        }
     }
+
 }
