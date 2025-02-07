@@ -574,5 +574,53 @@ namespace TacticalBoard
             thumb.Visibility = Visibility.Collapsed;
             nextthumb.Visibility = Visibility.Visible;
         }
+
+        // udoya func
+        private void LoadStamps()
+        {
+            string stampFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "stamps");
+            if (System.IO.Directory.Exists(stampFolder))
+            {
+                var files = System.IO.Directory.GetFiles(stampFolder, "*.*");
+                foreach (var file in files)
+                {
+                    if (file.EndsWith(".png") || file.EndsWith(".jpg") || file.EndsWith(".jpeg"))
+                    {
+                        StackPanel stackPanel = new StackPanel { Orientation = Orientation.Vertical, Margin = new Thickness(5) };
+
+                        Image image = new Image
+                        {
+                            Source = new BitmapImage(new Uri(file, UriKind.Absolute)),
+                            Width = 100,
+                            Height = 100,
+                            Tag = file
+                        };
+                        //image.MouseLeftButtonUp += Image_MouseLeftButtonUp;
+
+                        TextBlock textBlock = new TextBlock
+                        {
+                            Text = System.IO.Path.GetFileName(file),
+                            HorizontalAlignment = HorizontalAlignment.Center
+                        };
+
+                        stackPanel.Children.Add(image);
+                        stackPanel.Children.Add(textBlock);
+                        //StampPanel.Children.Add(stackPanel);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("スタンプフォルダが見つかりません。");
+            }
+        }
+
+        //private void Image_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        //{
+        //    Image image = sender as Image;
+        //    SelectedStampPath = image.Tag as string;
+        //    this.DialogResult = true;
+        //    this.Close();
+        //}
     }
 }
