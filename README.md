@@ -11,9 +11,11 @@ exeファイルと同じディレクトリにあるoperators/atk, defにあるpn
 - .NET Framework 4.7.2
 
 ## このforkで改造したいこと
-- mapとstampとリスト表示
+- mapとstampとリスト表示(Done)
  - mapは<map_name>_<attribute>_<floor>.png　のような形式でmapフォルダにあれば、勝手にリスト表示してくれるようにしたい。
  - stampはGeneral/Defender/Atackkerの3つに分けて色々区分したい
+- stampの移動
+
 
 ## future work
 - realtime share

@@ -70,7 +70,6 @@ namespace TacticalBoard
                 "Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1"
             };
 
-             //ObjectList の初期化は不要です。XAMLで定義されています。
         }
 
         //Thumbドラッグ開始
@@ -324,12 +323,13 @@ namespace TacticalBoard
             IsStamp = true;
             stampIndex++;
 
-            //右クリックで削除できるようにイベントハンドラを用意する
-            stamp.MouseRightButtonUp += new MouseButtonEventHandler(StampClear);
 
             //マウスカーソルの位置に画像をセットする
             Point mousePoint = Mouse.GetPosition(nowLayerInk);
             stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+
+            //右クリックで削除できるようにイベントハンドラを用意する
+            stamp.MouseRightButtonUp += new MouseButtonEventHandler(StampClear);
 
             //スタンプを配置
             nowLayerStamp.Children.Add(stamp);
@@ -462,17 +462,21 @@ namespace TacticalBoard
         //スタンプを右クリックしたときの動作(右クリックしたスタンプを消す)
         private void StampClear(object sender, RoutedEventArgs e)
         {
-            try
+            if (IsStamp || EraseButton.IsChecked == false)
             {
-                var Stamp = sender as Image;
-                Stamp.Visibility = Visibility.Collapsed;
+                return;
             }
-            catch (Exception)
-            {
-                var Stamp = sender as TextBlock;
-                var textcanvas = Stamp.Parent as Canvas;
-                textcanvas.Visibility = Visibility.Collapsed;
-            }
+                try
+                {
+                    var Stamp = sender as Image;
+                    Stamp.Visibility = Visibility.Collapsed;
+                }
+                catch (Exception)
+                {
+                    var Stamp = sender as TextBlock;
+                    var textcanvas = Stamp.Parent as Canvas;
+                    textcanvas.Visibility = Visibility.Collapsed;
+                }
         }
 
         //インクのカラー設定
