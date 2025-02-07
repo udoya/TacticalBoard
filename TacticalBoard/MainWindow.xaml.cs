@@ -61,6 +61,10 @@ namespace TacticalBoard
 
         DrawingAttributes inkDA;
 
+        private bool isDragging = false;
+        private Point startPoint;
+        private Image currentStamp;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -171,6 +175,9 @@ namespace TacticalBoard
         {
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+            MoveButton.IsChecked = false;
+            isDragging = false;
+
             var Thumb = sender as Thumb;
             Point thumbPoint = Thumb.TranslatePoint(new Point(0, 0), PeaceCanvas);
             Point mousePoint = Mouse.GetPosition(PeaceCanvas);
@@ -242,6 +249,8 @@ namespace TacticalBoard
             //ボタン周りのリセット
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+            MoveButton.IsChecked = false;
+            isDragging = false;
 
             //コマのリセット
             for (i = 0; i < 10; i++)
@@ -294,14 +303,18 @@ namespace TacticalBoard
             EraseButton.IsChecked = true;
             CMItems[1].IsChecked = true;
             CMItems[0].IsChecked = false;
+            CMItems[2].IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.EraseByStroke;
             nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
+            MoveButton.IsChecked = false;
+            isDragging = false;
         }
         private void EraseUnchecked(object sender, RoutedEventArgs e)
         {
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             EraseButton.IsChecked = false;
             CMItems[1].IsChecked = false;
+
         }
 
         //画面上でのクリック時の動作
@@ -332,6 +345,9 @@ namespace TacticalBoard
             stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
 
             //右クリックで削除できるようにイベントハンドラを用意する
+            stamp.MouseLeftButtonDown += new MouseButtonEventHandler(Stamp_MouseLeftButtonDown);
+            stamp.MouseMove += (Stamp_MouseMove);
+            stamp.MouseLeftButtonUp += new MouseButtonEventHandler(Stamp_MouseLeftButtonUp);
             stamp.MouseRightButtonUp += new MouseButtonEventHandler(StampClear);
 
             //スタンプを配置
@@ -341,23 +357,26 @@ namespace TacticalBoard
 
         private void PressStamp(Image _stamp)
         {
-            //スタンプのコピーを作成
+            // スタンプのコピーを作成
             Image stamp = new Image
             {
-                Source = _stamp.Source,
+                Source = new BitmapImage(new Uri((_stamp.Source as BitmapImage).UriSource.ToString(), UriKind.RelativeOrAbsolute)),
                 Width = 50
             };
             IsStamp = true;
             stampIndex++;
 
-            //右クリックで削除できるようにイベントハンドラを用意する
+            // 右クリックで削除できるようにイベントハンドラを用意する
+            stamp.MouseLeftButtonDown += new MouseButtonEventHandler(Stamp_MouseLeftButtonDown);
+            stamp.MouseMove += (Stamp_MouseMove);
+            stamp.MouseLeftButtonUp += new MouseButtonEventHandler(Stamp_MouseLeftButtonUp);
             stamp.MouseRightButtonUp += new MouseButtonEventHandler(StampClear);
 
-            //マウスカーソルの位置に画像をセットする
+            // マウスカーソルの位置に画像をセットする
             Point mousePoint = Mouse.GetPosition(nowLayerInk);
             stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
 
-            //スタンプを配置
+            // スタンプを配置
             nowLayerStamp.Children.Add(stamp);
             stampImages.Add(stamp);
         }
@@ -368,6 +387,8 @@ namespace TacticalBoard
             //ペン関係をオフにする
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+            MoveButton.IsChecked = false;
+            isDragging = false;
 
             //スタンプ押下メソッドを呼び出す
             PressStamp("Resources/frag.png");
@@ -379,6 +400,8 @@ namespace TacticalBoard
             //ペン関係をオフにする
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+            MoveButton.IsChecked = false;
+            isDragging = false;
 
             //スタンプ押下メソッドを呼び出す。
             PressStamp("Resources/smoke.png");
@@ -390,6 +413,8 @@ namespace TacticalBoard
             //ペン関係をオフにする
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+            MoveButton.IsChecked = false;
+            isDragging = false;
 
             //スタンプ押下メソッドを呼び出す。
             PressStamp("Resources/stun.png");
@@ -438,6 +463,8 @@ namespace TacticalBoard
             nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
             CMItems[0].IsChecked = false;
             CMItems[1].IsChecked = false;
+            CMItems[2].IsChecked = false;
+
             EraseButton.IsChecked = false;
             beforeLayerStamp.Visibility = Visibility.Collapsed;
             nowLayerButton.IsEnabled = false;
@@ -505,6 +532,10 @@ namespace TacticalBoard
                 nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
                 beforeInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
                 nowInkButton.BorderBrush = new SolidColorBrush(Colors.Black);
+
+                MoveButton.IsChecked = false;
+                isDragging = false;
+
             }
 
             //ボタンの背景色をインク色にする
@@ -546,6 +577,8 @@ namespace TacticalBoard
             //ペン関係をオフにする
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+            MoveButton.IsChecked = false;
+            isDragging = false;
             int i;
 
 
@@ -605,12 +638,18 @@ namespace TacticalBoard
                 EraseButton.IsChecked = false;
                 nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
                 nowInkButton.BorderBrush = new SolidColorBrush(Colors.Black);
+                isDragging = false;
+                MoveButton.IsChecked = false;
+                CMItems[2].IsChecked = false;
             }
             else
             {
                 EraseButton.IsChecked = false;
                 nowLayerInk.EditingMode = InkCanvasEditingMode.None;
                 nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
+                                isDragging = false;
+                MoveButton.IsChecked = false;
+                CMItems[2].IsChecked = false;
             }
         }
 
@@ -706,6 +745,8 @@ namespace TacticalBoard
                 //ペン関係をオフにする
                 EraseButton.IsChecked = false;
                 nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+                MoveButton.IsChecked = false;
+                isDragging = false;
 
                 //スタンプ押下メソッドを呼び出す。
                 PressStamp(image);
@@ -776,6 +817,70 @@ namespace TacticalBoard
                 {
                     MessageBox.Show("エラーが発生しました。");
                 }
+            }
+        }
+
+        // マウス左ボタン押下時
+        private void Stamp_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(isDragging)
+            {
+                currentStamp = sender as Image;
+                startPoint = e.GetPosition(nowLayerStamp);
+                currentStamp.CaptureMouse();
+                e.Handled = true;
+            }
+        }
+
+        // マウス移動時
+        private void Stamp_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging && currentStamp != null)
+            {
+                Point currentPoint = e.GetPosition(nowLayerStamp);
+                double offsetX = currentPoint.X - startPoint.X;
+                double offsetY = currentPoint.Y - startPoint.Y;
+
+                // スタンプの位置を更新
+                double newX = currentStamp.Margin.Left + offsetX;
+                double newY = currentStamp.Margin.Top + offsetY;
+                currentStamp.Margin = new Thickness(newX, newY, 0, 0);
+
+                startPoint = currentPoint;
+            }
+        }
+
+        // マウス左ボタン解放時
+        private void Stamp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (isDragging && currentStamp != null)
+            {
+                currentStamp.ReleaseMouseCapture();
+                currentStamp = null;
+                e.Handled = true;
+            }
+        }
+
+        private void IsMoveButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (isDragging)
+            {
+                isDragging = false;
+                MoveButton.IsChecked = false;
+                CMItems[2].IsChecked = false;
+
+            }
+            else
+            {
+                isDragging = true;
+                MoveButton.IsChecked = true;
+                EraseButton.IsChecked = false;
+                CMItems[0].IsChecked = false;
+                CMItems[1].IsChecked = false;
+                CMItems[2].IsChecked = true;
+
+                //nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
             }
         }
     }
