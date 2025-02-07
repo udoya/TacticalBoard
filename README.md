@@ -1,5 +1,11 @@
 udoya @2025/2/7
 
+## custom operator and stamp
+exeファイルと同じディレクトリにあるoperators/atk, defにあるpngをリストにしています．
+ガジェットのstampに関しても，gadgets/general, def_gadget, atk_gadget, generalに分けています．これらのディレクトリを作成し，そこにpngファイルを入れることで，リスト表示が可能です．
+ファイル名やサイズは僕もよくわかっていません．ただ，ファイル名はリストに表示される名前になります．
+
+
 ## required for build
 - Visual Studio (I use 2022 pro)
 - .NET Framework 4.7.2

@@ -608,11 +608,19 @@ namespace TacticalBoard
         private void OperatorButtonClick(object sender, RoutedEventArgs e)
         {
             string role = (sender as Button).Content.ToString().ToLower();
-            string directoryPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "output", role);
-            DisplayOperatorIcons(directoryPath);
+            string directoryPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "operators", role);
+            DisplayIcons(directoryPath);
         }
 
-        private void DisplayOperatorIcons(string directoryPath)
+
+        private void GadgetButtonClick(object sender, RoutedEventArgs e)
+        {
+            string name = (sender as Button).Content.ToString().ToLower();
+            string directoryPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "gadgets", name);
+            DisplayIcons(directoryPath);
+        }
+
+        private void DisplayIcons(string directoryPath)
         {
             if (!Directory.Exists(directoryPath))
             {
