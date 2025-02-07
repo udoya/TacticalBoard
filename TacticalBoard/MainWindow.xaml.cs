@@ -314,9 +314,6 @@ namespace TacticalBoard
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             EraseButton.IsChecked = false;
             CMItems[1].IsChecked = false;
-            CMItems[2].IsChecked = false;
-            MoveButton.IsChecked = false;
-            isDragging = false;
 
         }
 
