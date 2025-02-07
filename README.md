@@ -14,19 +14,18 @@ exeファイルと同じディレクトリにあるoperators/atk, defにあるpn
 - mapとstampとリスト表示(Done)
  - mapは<map_name>_<attribute>_<floor>.png　のような形式でmapフォルダにあれば、勝手にリスト表示してくれるようにしたい。
  - stampはGeneral/Defender/Atackkerの3つに分けて色々区分したい
-- stampの移動
+- stampの移動(Done)
 
 
 ## future work
 - realtime share
-- release exe file for windows
+- release exe file for windows (Done)
 
 
 ## How to use
 
 ### other component
 ここにあるものは現状slnファイルのビルドに使用せず，別途データを用意するために利用したものである．
-
 
 `ClassifyOperator.js` は，input_dir/にまとまっている.pngファイルを攻撃，防御に分類し直しているものである．これらは[r6operators ライブラリ](https://github.com/marcopixel/r6operators)を利用してsvgアイコンを入手し，何らかの形で([ImageMagick](https://imagemagick.org/index.php)など)pngファイルへとコンバートすることを前提としている．そのため，npmが動かせる環境でないといけない．
 
