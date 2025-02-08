@@ -64,6 +64,7 @@ namespace TacticalBoard
         private bool isDragging = false;
         private Point startPoint;
         private Image currentStamp;
+        private bool isShowList = true;
 
         public MainWindow()
         {
@@ -660,7 +661,7 @@ namespace TacticalBoard
                 EraseButton.IsChecked = false;
                 nowLayerInk.EditingMode = InkCanvasEditingMode.None;
                 nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
-                                isDragging = false;
+                isDragging = false;
                 MoveButton.IsChecked = false;
                 CMItems[2].IsChecked = false;
             }
@@ -836,7 +837,7 @@ namespace TacticalBoard
         // マウス左ボタン押下時
         private void Stamp_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(isDragging)
+            if (isDragging)
             {
                 currentStamp = sender as Image;
                 startPoint = e.GetPosition(nowLayerStamp);
@@ -896,6 +897,20 @@ namespace TacticalBoard
                 //nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
             }
         }
-    }
 
+        private void IsShowButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (isShowList)
+            {
+                isShowList = false;
+                ObjectList.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                isShowList = true;
+                ObjectList.Visibility = Visibility.Visible;
+            }
+        }
+
+    }
 }

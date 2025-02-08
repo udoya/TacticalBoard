@@ -243,8 +243,9 @@
     <Button x:Name="OrangeInk" Content="✒" HorizontalAlignment="Left" Margin="195,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Orange" Click="ColorButton"/>
     <Button x:Name="WhiteInk" Content="✒" HorizontalAlignment="Left" Margin="215,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="White" Click="ColorButton"/>
     <Button x:Name="BlackInk" Content="✒" HorizontalAlignment="Left" Margin="235,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Black" Click="ColorButton" Foreground="White" Height="20"/>
-    <Button Content="atk" HorizontalAlignment="Right" Margin="0,5,70,0" VerticalAlignment="Top" Width="50" Click="OperatorButtonClick"/>
-    <Button Content="def" HorizontalAlignment="Right" Margin="0,5,140,0" VerticalAlignment="Top" Width="50" Click="OperatorButtonClick"/>
+    <Button Content="atk" HorizontalAlignment="Right" Margin="0,5,10,0" VerticalAlignment="Top" Width="60" Click="OperatorButtonClick"/>
+    <Button Content="def" HorizontalAlignment="Right" Margin="0,5,70,0" VerticalAlignment="Top" Width="60" Click="OperatorButtonClick"/>
+    <Button  x:Name="ShowButton" Content="Show_List" HorizontalAlignment="Right" Margin="0,5,190,0" VerticalAlignment="Top" Width="80" Click="IsShowButton_Click"/>
 
     <Button Content="atk_gadget" HorizontalAlignment="Right" Margin="0,5,10,0" VerticalAlignment="Bottom" Width="60" Click="GadgetButtonClick"/>
     <Button Content="def_gadget" HorizontalAlignment="Right" Margin="0,5,70,0" VerticalAlignment="Bottom" Width="60" Click="GadgetButtonClick"/>
