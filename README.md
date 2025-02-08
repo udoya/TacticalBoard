@@ -1,5 +1,33 @@
 udoya @2025/2/7
 
+## How to use
+releaseを見よう！[releaseはこちらから](https://github.com/udoya/TacticalBoard/releases)
+exeファイルをダウンロードし、そのまま起動する。
+各種リソース、ファイル、ディレクトリは個々人で用意する。以下のディレクトリ構成にすることが望ましい。
+```txt
+├── TacticalBoard.exe
+├── operators/
+│   ├── atk/
+│   │   └── (データ.png)
+│   └── def/
+│       └── (データ.png)
+├── gadgets/
+│   ├── atk_gadget/
+│   │   └── (このあたりはpngで)
+│   ├── def_gadget/
+│   │   └── (お好みに合わせて)
+│   ├── favolite/
+│   │   └── (カスタマイズ)
+│   └── general/
+│       └── (してください)
+└── maps/
+    └── (好きなマップたち)/
+        ├── 0.png / 0.jpg
+        ├── 1.png / 1.jpg
+        ├── 2.png / 2.jpg
+        └── 3.png / 3.jpg
+```
+
 ## custom operator and stamp
 exeファイルと同じディレクトリにあるoperators/atk, defにあるpngをリストにしています．
 ガジェットのstampに関しても，gadgets/general, def_gadget, atk_gadget, generalに分けています．これらのディレクトリを作成し，そこにpngファイルを入れることで，リスト表示が可能です．
@@ -9,24 +37,22 @@ exeファイルと同じディレクトリにあるoperators/atk, defにあるpn
 ## required for build
 - Visual Studio (I use 2022 pro)
 - .NET Framework 4.7.2
+- Windows
 
 ## このforkで改造したいこと
 - mapとstampとリスト表示(Done)
  - mapは<map_name>_<attribute>_<floor>.png　のような形式でmapフォルダにあれば、勝手にリスト表示してくれるようにしたい。
  - stampはGeneral/Defender/Atackkerの3つに分けて色々区分したい
-- stampの移動
+- stampの移動(Done)
 
 
 ## future work
 - realtime share
-- release exe file for windows
+- release exe file for windows (Done)
 
 
-## How to use
-
-### other component
+## other component
 ここにあるものは現状slnファイルのビルドに使用せず，別途データを用意するために利用したものである．
-
 
 `ClassifyOperator.js` は，input_dir/にまとまっている.pngファイルを攻撃，防御に分類し直しているものである．これらは[r6operators ライブラリ](https://github.com/marcopixel/r6operators)を利用してsvgアイコンを入手し，何らかの形で([ImageMagick](https://imagemagick.org/index.php)など)pngファイルへとコンバートすることを前提としている．そのため，npmが動かせる環境でないといけない．
 
