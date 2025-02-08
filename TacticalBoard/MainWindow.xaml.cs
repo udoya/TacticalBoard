@@ -57,7 +57,6 @@ namespace TacticalBoard
 
         //メニュー項目用
         List<MenuItem> CMItems = new List<MenuItem>();
-        //private ListBox ObjectList = null;
 
         DrawingAttributes inkDA;
 
@@ -65,6 +64,8 @@ namespace TacticalBoard
         private Point startPoint;
         private Image currentStamp;
         private bool isShowList = true;
+        private bool isShowMapList = false;
+
 
         public MainWindow()
         {
@@ -796,7 +797,7 @@ namespace TacticalBoard
 
         }
 
-        private void mapFolderButton_Click(object sender, RoutedEventArgs e)
+        private void MapFolderButton_Click(object sender, RoutedEventArgs e)
         {
             // inkcanvaslayer1~4のbackgroundを初期化
             inkCanvasLayer1.Background = null;
@@ -833,6 +834,83 @@ namespace TacticalBoard
                 }
             }
         }
+
+
+        private void MapFolderButton_Click2(object sender, RoutedEventArgs e)
+        {
+            if (isShowMapList)
+            {
+                isShowMapList = false;
+                MapList.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                isShowMapList = true;
+                MapList.Visibility = Visibility.Visible;
+                var SelectedRootPath = AppDomain.CurrentDomain.BaseDirectory + "maps";
+                var directories = Directory.GetDirectories(SelectedRootPath);
+                MapList.Items.Clear();
+
+                foreach (var directory in directories)
+                {
+                    StackPanel panel = new StackPanel { Orientation = Orientation.Horizontal };
+                    TextBlock textBlock = new TextBlock
+                    {
+                        // size
+                        FontSize = 18,
+                        Text = System.IO.Path.GetFileNameWithoutExtension(directory),
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 0, 0, 0)
+                    };
+
+                    panel.Children.Add(textBlock);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        MapList.Items.Add(panel);
+                    });
+                }
+                MapList.UpdateLayout();
+            }
+        }
+
+
+        private void MapList_DoubleClick(object sender, RoutedEventArgs e)
+        {
+            // inkcanvaslayer1~4のbackgroundを初期化
+            inkCanvasLayer1.Background = null;
+            inkCanvasLayer2.Background = null;
+            inkCanvasLayer3.Background = null;
+            inkCanvasLayer4.Background = null;
+
+            var SelectedRootPath = AppDomain.CurrentDomain.BaseDirectory + "maps";
+
+
+            // path = root + listbox selected item name
+            var dir_text = MapList.SelectedItem as StackPanel;
+
+            var SelectedPath = SelectedRootPath + "\\" + (dir_text.Children[0] as TextBlock).Text;
+
+            // フォルダのリストを生成
+
+            try
+            {
+                // フォルダ内の画像ファイルを取得 (seletcedPath+ "/<0,1,2,3>.png")の4枚、ただし存在しない場合は無視
+                for (int i = 0; i < 4; i++)
+                {
+                    string filePath = System.IO.Path.Combine(SelectedPath, i + ".png");
+                    UpdateAllLayerBackGroundWithFileName(filePath, i);
+
+                    // jpgに対してもやりたかった
+                    filePath = System.IO.Path.Combine(SelectedPath, i + ".jpg");
+                    UpdateAllLayerBackGroundWithFileName(filePath, i);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("エラーが発生しました。");
+            }
+        }
+
 
         // マウス左ボタン押下時
         private void Stamp_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

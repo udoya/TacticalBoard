@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TacticalBoard"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="TacticalBoard" x:Class="TacticalBoard.MainWindow"
         mc:Ignorable="d"
-        Title="TacticalBoard" Height="717" Width="1280">
+        Title="TacticalBoard" Height="900" Width="1400">
   <Window.Resources>
     <ContextMenu x:Key="CMenu">
       <MenuItem x:Name ="CMPen"  Header="ペン" IsCheckable="True" Click="MenuPenClick" Initialized="MenuItemInitialized"/>
@@ -231,7 +231,7 @@
     <Button x:Name="StampButton" Content="Stamp" HorizontalAlignment="Left" Margin="475,5,0,0" VerticalAlignment="Top" Width="45" Click="stampButtonClick"/>
     <TextBox x:Name="StampText" HorizontalAlignment="Left" Height="20" Margin="550,5,0,0" VerticalAlignment="Top" TextWrapping="Wrap" Width="90" Foreground="Black"/>
     <Button x:Name="TextButton" Content="Text" HorizontalAlignment="Left" Margin="640,5,0,5" VerticalAlignment="Top" Click="TextButtonClick"  Width="45"/>
-    <Button x:Name="mapFolderButton" Content="MapFolder" HorizontalAlignment="Left" Margin="730,5,0,5" VerticalAlignment="Top" Click="mapFolderButton_Click"  Width="70"/>
+    <Button x:Name="mapFolderButton" Content="MapFolder" HorizontalAlignment="Left" Margin="730,5,0,5" VerticalAlignment="Top" Click="MapFolderButton_Click2"  Width="70"/>
     <Button x:Name="Layer1Button" Content="Layer1" HorizontalAlignment="Left" Margin="800,5,0,0" VerticalAlignment="Top" Width="45" Click="layerButtonClick" IsEnabled="False"/>
     <Button x:Name="Layer2Button" Content="Layer2" HorizontalAlignment="Left" Margin="845,5,0,0" VerticalAlignment="Top" Width="45" Click="layerButtonClick"/>
     <Button x:Name="Layer3Button" Content="Layer3" HorizontalAlignment="Left" Margin="890,5,0,0" VerticalAlignment="Top" Width="45" Click="layerButtonClick"/>
@@ -251,6 +251,10 @@
     <Button Content="def_gadget" HorizontalAlignment="Right" Margin="0,5,70,0" VerticalAlignment="Bottom" Width="60" Click="GadgetButtonClick"/>
     <Button Content="general" HorizontalAlignment="Right" Margin="0,5,130,0" VerticalAlignment="Bottom" Width="60" Click="GadgetButtonClick"/>
     <Button Content="favolite" HorizontalAlignment="Right" Margin="0,5,190,0" VerticalAlignment="Bottom" Width="60" Click="GadgetButtonClick"/>
+
+    <ListView x:Name="MapList" HorizontalAlignment="Left" Margin="0,4,10,0" Width="200" Height="600" Grid.Row="1" MouseDoubleClick="MapList_DoubleClick" Visibility="Collapsed">
+    </ListView>
+
 
     <ListView x:Name="ObjectList" HorizontalAlignment="Right" Margin="0,4,10,0" Width="200" Height="600" Grid.Row="1" MouseDoubleClick="ObjectList_MouseDoubleClick">
     </ListView>
